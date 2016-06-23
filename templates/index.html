@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>iCar</title>
+    <style>
+      body {
+        font-family: monospace;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="log"></div>
+
+    <script src="/static/socket.io.min.js"></script>
+    <script>
+    var logEl = document.getElementById('log');
+    function log(msg) {
+      var el = document.createElement('div');
+      el.innerText = msg;
+      logEl.appendChild(el);
+    }
+
+    var socket = io.connect('/socket');
+    socket.on('connect', function() {
+      console.log('Connected');
+      log('Connected to Webservice');
+    });
+    socket.on('message', function(data) {
+      console.log(data);
+      if (typeof data.message == 'object') {
+        data.message = JSON.stringify(data.message);
+      }
+      log('Message: ' + data.message);
+    });
+
+    socket.emit('status');
+
+    </script>
+  </body>
+</html>

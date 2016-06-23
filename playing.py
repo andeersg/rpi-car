@@ -36,7 +36,12 @@ def registerPlaytime(show, elapsed):
     json_data = open('config.json', 'r')
     data = json.load(json_data)
 
-    data[show] = elapsed
+    data[show]['elapsed'] = elapsed
+
+    # If there is less than 10 seconds left we mark it as finished.
+    if (data[show]['duration'] - elapsed) < 10:
+        data[show]['finished'] = True
+
 
     json_data = open('config.json', 'w+')
     json_data.write(json.dumps(data))
